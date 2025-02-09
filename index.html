@@ -1,1 +1,213 @@
-<h1>Hola como estas</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Credenciales Digitales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button, select {
+            display: block;
+            width: 93%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .credencial {
+            width: 450px;
+            height: 250px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .titulo {
+            text-align: center;
+            font-weight: normal;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .subtitulo {
+            text-align: center;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #000000;
+            font-size: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 0 1px #000000, 0 0 1px #000000;
+            letter-spacing: 0.5px;
+        }
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+        }
+        .info-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .label {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .info {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .foto-container {
+            position: relative;
+            width: 100px;
+            margin-left: 15px;
+            align-self: flex-end;
+            margin-bottom: 3mm;
+        }
+        .foto {
+            width: 100px;
+            height: 125px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #4a4a4a;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        .os10 {
+            position: absolute;
+            right: 110px;
+            bottom: 10px;
+            transform: rotate(90deg);
+            transform-origin: right center;
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 1px;
+        }
+        .qr {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="credencialForm">
+                <select id="tipoAgente" required>
+                <option value="" disabled selected>Tipo de agente</option>
+                <option value="GUARDIA DE SEGURIDAD">Guardia de Seguridad</option>
+                <option value="SUPERVISOR">Supervisor</option>
+                <option value="JEFE DE SEGURIDAD">Jefe de Seguridad</option>
+                <option value="ENCARGADO DE SEGURIDAD">Encargado de Seguridad</option>
+                <option value="ASESOR">Asesor</option>
+                <option value="CAPACITADOR">Capacitador</option>
+                <option value="CONSERJE">Conserje</option>
+                <option value="VIGILANTE PRIVADO">Vigilante Privado</option>
+            </select>
+            <input type="text" id="empresa" placeholder="Nombre de la empresa de RRHH" required>
+            <input type="text" id="nombre" placeholder="Nombre completo del agente" required>
+            <input type="text" id="rut" placeholder="RUT del agente" required>
+            <input type="date" id="validez" required>
+            
+            
+            <input type="file" id="foto" accept="image/*" required>
+            <button type="submit">Generar Credencial</button>
+        </form>
+        <div class="credencial" id="credencial">
+            <div class="titulo">TARJETA DE IDENTIFICACIÓN</div>
+            <div class="subtitulo" id="tipoAgenteDisplay">GUARDIA DE SEGURIDAD</div>
+            <div class="content-wrapper">
+                <div class="info-container">
+                    <div class="info">
+                        <div class="label">EMPRESA</div>
+                        <div id="empresaDisplay"></div>
+                    </div>
+                    <div class="info">
+                        <div class="label">NOMBRE</div>
+                        <div id="nombreDisplay"></div>
+                    </div>
+                    <div class="info">
+                        <div class="label">RUT</div>
+                        <div id="rutDisplay"></div>
+                    </div>
+                    <div class="info">
+                        <div class="label">VALIDEZ</div>
+                        <div id="validezDisplay"></div>
+                    </div>
+                </div>
+                <div class="foto-container">
+                    <div class="foto" id="fotoDisplay"></div>
+                    <div class="os10">*  O. S. 10  *</div>
+                </div>
+            </div>
+            <div class="qr" id="qrcode"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('credencialForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const empresa = document.getElementById('empresa').value;
+            const nombre = document.getElementById('nombre').value;
+            const rut = document.getElementById('rut').value;
+            const validez = document.getElementById('validez').value;
+            const tipoAgente = document.getElementById('tipoAgente').value;
+            const foto = document.getElementById('foto').files[0];
+            
+            document.getElementById('empresaDisplay').textContent = empresa;
+            document.getElementById('nombreDisplay').textContent = nombre;
+            document.getElementById('rutDisplay').textContent = rut;
+            document.getElementById('validezDisplay').textContent = new Date(validez).toLocaleDateString('es-CL');
+            document.getElementById('tipoAgenteDisplay').textContent = tipoAgente;
+            
+            if (foto) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('fotoDisplay').style.backgroundImage = `url(${e.target.result})`;
+                }
+                reader.readAsDataURL(foto);
+            }
+            
+            // Generar QR
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById("qrcode"), {
+                text: "Credencial original para " + nombre + " - RUT: " + rut,
+                width: 64,
+                height: 64
+            });
+        });
+    </script>
+</body>
+</html>
