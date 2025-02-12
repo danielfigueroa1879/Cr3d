@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Credenciales Digitales</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
     <style>
         /* Variables CSS para modo claro y oscuro */
         :root {
@@ -18,19 +19,22 @@
         }
 
         /* Modo oscuro */
-        body.dark-mode {
-            --bg-color: #121212;
-            --text-color: #ffffff;
-            --form-bg-color: #1e1e1e;
-            --input-bg-color: #2c2c2c;
-            --button-bg-color: #4CAF50;
-            --border-color: #444;
-            --shadow-color: rgba(0, 0, 0, 0.5);
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #ffffff;
+                --form-bg-color: #1e1e1e;
+                --input-bg-color: #2c2c2c;
+                --button-bg-color: #4CAF50;
+                --border-color: #444;
+                --shadow-color: rgba(0, 0, 0, 0.5);
+            }
         }
 
         /* Estilos generales */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 200; /* Poppins Extra Light */
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -64,6 +68,8 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 200;
         }
 
         button {
@@ -137,29 +143,12 @@
             margin-top: 15px;
         }
 
-        /* Botón de modo oscuro/claro */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            background-color: var(--button-bg-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
         .hidden {
             display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Botón para alternar entre modos -->
-    <button class="theme-toggle" id="themeToggle">Cambiar a Modo Claro</button>
-
     <div class="container">
         <!-- Formulario -->
         <form id="credencialForm">
@@ -212,19 +201,6 @@
     </div>
 
     <script>
-        // Alternar entre modo oscuro y claro
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            if (body.classList.contains('dark-mode')) {
-                themeToggle.textContent = 'Cambiar a Modo Claro';
-            } else {
-                themeToggle.textContent = 'Cambiar a Modo Oscuro';
-            }
-        });
-
         // Generar credencial
         document.getElementById('credencialForm').addEventListener('submit', function(e) {
             e.preventDefault();
