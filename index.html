@@ -6,174 +6,160 @@
     <title>Generador de Credenciales Digitales</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        /* Variables CSS para modo claro y oscuro */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --form-bg-color: #f5f5f5;
+            --input-bg-color: #ffffff;
+            --button-bg-color: #4CAF50;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
         /* Modo oscuro */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --form-bg-color: #1e1e1e;
+            --input-bg-color: #2c2c2c;
+            --button-bg-color: #4CAF50;
+            --border-color: #444;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #121212; /* Fondo oscuro */
-            color: #ffffff; /* Texto claro */
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             width: 100%;
+            max-width: 500px;
         }
+
         form {
-            background-color: #1e1e1e; /* Fondo del formulario */
+            background-color: var(--form-bg-color);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
+            box-shadow: 0 0 10px var(--shadow-color);
+            margin-bottom: 20px;
         }
+
         input, button, select {
             display: block;
             width: 100%;
             margin-bottom: 10px;
-            padding: 8px;
-            box-sizing: border-box;
-            background-color: #2c2c2c; /* Fondo oscuro para inputs */
-            color: #ffffff; /* Texto claro */
-            border: 1px solid #444;
+            padding: 10px;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
+            font-size: 14px;
         }
+
         button {
-            background-color: #4CAF50; /* Botón verde */
+            background-color: var(--button-bg-color);
             color: white;
             border: none;
             cursor: pointer;
+            font-weight: bold;
         }
+
         button:hover {
-            background-color: #45a049; /* Cambio de color al pasar el mouse */
+            background-color: #45a049;
         }
+
         .credencial {
-            width: 100%;
-            max-width: 450px;
-            height: auto;
-            background-color: #1e1e1e; /* Fondo oscuro para la credencial */
-            border: 1px solid #444;
+            background-color: var(--form-bg-color);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 15px;
-            position: relative;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px var(--shadow-color);
             display: flex;
             flex-direction: column;
-            box-sizing: border-box;
-            margin-top: 20px;
-        }
-        .titulo {
+            align-items: center;
             text-align: center;
-            font-weight: normal;
-            margin-bottom: 5px;
+        }
+
+        .titulo {
             font-size: 14px;
             text-transform: uppercase;
-            color: #d4ff00; /* Color amarillo para destacar */
+            color: #d4ff00;
+            margin-bottom: 10px;
         }
+
         .subtitulo {
-            text-align: center;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #ffffff;
-            font-size: 20px;
-            text-transform: uppercase;
         }
-        .content-wrapper {
-            display: flex;
-            flex: 1;
-        }
+
         .info-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            width: 100%;
         }
-        .label {
-            font-size: 10px;
-            color: #aaa; /* Texto gris claro */
-            margin-bottom: 2px;
-        }
+
         .info {
             margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #444;
         }
+
+        .label {
+            font-size: 10px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
         .foto-container {
             position: relative;
             width: 100px;
-            margin-left: 15px;
-            align-self: flex-end;
-            margin-bottom: 3mm;
+            margin: 0 auto;
         }
+
         .foto {
             width: 100px;
             height: 125px;
-            background-color: #2c2c2c;
+            background-color: var(--input-bg-color);
             background-size: cover;
             background-position: center;
-            border: 2px solid #4a4a4a;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 5px var(--shadow-color);
         }
-        .os10 {
-            position: absolute;
-            right: 110px;
-            bottom: 10px;
-            transform: rotate(90deg);
-            transform-origin: right center;
-            white-space: nowrap;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
+
         .qr {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            margin-top: 15px;
         }
-        /* Estilos para móviles */
-        @media (max-width: 768px) {
-            form {
-                padding: 15px;
-            }
-            .credencial {
-                padding: 15px;
-            }
-            .subtitulo {
-                font-size: 18px;
-            }
-            .label {
-                font-size: 9px;
-            }
-            .foto-container {
-                width: 80px;
-                margin-left: 10px;
-            }
-            .foto {
-                width: 80px;
-                height: 100px;
-            }
-            .os10 {
-                font-size: 16px;
-            }
-            .qr {
-                width: 50px;
-                height: 50px;
-            }
+
+        /* Botón de modo oscuro/claro */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: var(--button-bg-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
         }
-        /* Ocultar la credencial inicialmente */
+
         .hidden {
             display: none;
         }
     </style>
 </head>
 <body>
+    <!-- Botón para alternar entre modos -->
+    <button class="theme-toggle" id="themeToggle">Cambiar a Modo Claro</button>
+
     <div class="container">
         <!-- Formulario -->
         <form id="credencialForm">
@@ -200,39 +186,49 @@
         <div class="credencial hidden" id="credencial">
             <div class="titulo">TARJETA DE IDENTIFICACIÓN</div>
             <div class="subtitulo" id="tipoAgenteDisplay">GUARDIA DE SEGURIDAD</div>
-            <div class="content-wrapper">
-                <div class="info-container">
-                    <div class="info">
-                        <div class="label">EMPRESA</div>
-                        <div id="empresaDisplay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="label">NOMBRE</div>
-                        <div id="nombreDisplay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="label">RUT</div>
-                        <div id="rutDisplay"></div>
-                    </div>
-                    <div class="info">
-                        <div class="label">VALIDEZ</div>
-                        <div id="validezDisplay"></div>
-                    </div>
+            <div class="info-container">
+                <div class="info">
+                    <div class="label">EMPRESA</div>
+                    <div id="empresaDisplay"></div>
                 </div>
-                <div class="foto-container">
-                    <div class="foto" id="fotoDisplay"></div>
-                    <div class="os10">*  O. S. 10  *</div>
+                <div class="info">
+                    <div class="label">NOMBRE</div>
+                    <div id="nombreDisplay"></div>
                 </div>
+                <div class="info">
+                    <div class="label">RUT</div>
+                    <div id="rutDisplay"></div>
+                </div>
+                <div class="info">
+                    <div class="label">VALIDEZ</div>
+                    <div id="validezDisplay"></div>
+                </div>
+            </div>
+            <div class="foto-container">
+                <div class="foto" id="fotoDisplay"></div>
             </div>
             <div class="qr" id="qrcode"></div>
         </div>
     </div>
 
     <script>
+        // Alternar entre modo oscuro y claro
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.textContent = 'Cambiar a Modo Claro';
+            } else {
+                themeToggle.textContent = 'Cambiar a Modo Oscuro';
+            }
+        });
+
+        // Generar credencial
         document.getElementById('credencialForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Obtener los valores del formulario
             const empresa = document.getElementById('empresa').value;
             const nombre = document.getElementById('nombre').value;
             const rut = document.getElementById('rut').value;
@@ -240,14 +236,12 @@
             const tipoAgente = document.getElementById('tipoAgente').value;
             const foto = document.getElementById('foto').files[0];
 
-            // Mostrar los valores en la tarjeta
             document.getElementById('empresaDisplay').textContent = empresa;
             document.getElementById('nombreDisplay').textContent = nombre;
             document.getElementById('rutDisplay').textContent = rut;
             document.getElementById('validezDisplay').textContent = new Date(validez).toLocaleDateString('es-CL');
             document.getElementById('tipoAgenteDisplay').textContent = tipoAgente;
 
-            // Mostrar la foto seleccionada
             if (foto) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -256,7 +250,6 @@
                 reader.readAsDataURL(foto);
             }
 
-            // Generar el QR
             document.getElementById('qrcode').innerHTML = '';
             new QRCode(document.getElementById("qrcode"), {
                 text: "Credencial original para " + nombre + " - RUT: " + rut,
@@ -264,7 +257,6 @@
                 height: 64
             });
 
-            // Ocultar el formulario y mostrar la tarjeta
             document.getElementById('credencialForm').classList.add('hidden');
             document.getElementById('credencial').classList.remove('hidden');
         });
