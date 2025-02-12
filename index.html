@@ -6,10 +6,12 @@
     <title>Generador de Credenciales Digitales</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        /* Modo oscuro */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #121212; /* Fondo oscuro */
+            color: #ffffff; /* Texto claro */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,45 +20,53 @@
         }
         .container {
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap; /* Permite que los elementos se apilen en pantallas pequeñas */
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
         form {
-            background-color: white;
+            background-color: #1e1e1e; /* Fondo del formulario */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 400px; /* Ancho máximo para PC */
+            max-width: 400px;
             box-sizing: border-box;
         }
         input, button, select {
             display: block;
-            width: 100%; /* Ocupa todo el ancho del contenedor */
+            width: 100%;
             margin-bottom: 10px;
             padding: 8px;
             box-sizing: border-box;
+            background-color: #2c2c2c; /* Fondo oscuro para inputs */
+            color: #ffffff; /* Texto claro */
+            border: 1px solid #444;
+            border-radius: 4px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #4CAF50; /* Botón verde */
             color: white;
             border: none;
             cursor: pointer;
         }
+        button:hover {
+            background-color: #45a049; /* Cambio de color al pasar el mouse */
+        }
         .credencial {
             width: 100%;
-            max-width: 450px; /* Ancho máximo para PC */
-            height: auto; /* Altura automática para adaptarse al contenido */
-            background-color: white;
-            border: 1px solid #ccc;
+            max-width: 450px;
+            height: auto;
+            background-color: #1e1e1e; /* Fondo oscuro para la credencial */
+            border: 1px solid #444;
             border-radius: 8px;
             padding: 15px;
             position: relative;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
+            margin-top: 20px;
         }
         .titulo {
             text-align: center;
@@ -64,16 +74,15 @@
             margin-bottom: 5px;
             font-size: 14px;
             text-transform: uppercase;
+            color: #d4ff00; /* Color amarillo para destacar */
         }
         .subtitulo {
             text-align: center;
-            font-weight: 900;
+            font-weight: bold;
             margin-bottom: 15px;
-            color: #000000;
+            color: #ffffff;
             font-size: 20px;
             text-transform: uppercase;
-            text-shadow: 0 0 1px #000000, 0 0 1px #000000;
-            letter-spacing: 0.5px;
         }
         .content-wrapper {
             display: flex;
@@ -87,13 +96,13 @@
         }
         .label {
             font-size: 10px;
-            color: #666;
+            color: #aaa; /* Texto gris claro */
             margin-bottom: 2px;
         }
         .info {
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #444;
         }
         .foto-container {
             position: relative;
@@ -105,11 +114,11 @@
         .foto {
             width: 100px;
             height: 125px;
-            background-color: #ddd;
+            background-color: #2c2c2c;
             background-size: cover;
             background-position: center;
             border: 2px solid #4a4a4a;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
         .os10 {
             position: absolute;
@@ -119,8 +128,8 @@
             transform-origin: right center;
             white-space: nowrap;
             font-size: 18px;
-            font-weight: 900;
-            color: #000000;
+            font-weight: bold;
+            color: #ffffff;
             letter-spacing: 1px;
         }
         .qr {
@@ -128,47 +137,45 @@
             top: 15px;
             right: 15px;
         }
-
         /* Estilos para móviles */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column; /* Apilar elementos verticalmente */
-                align-items: center;
-            }
             form {
-                width: 100%; /* Ocupar todo el ancho en móviles */
-                padding: 15px; /* Reducir relleno */
+                padding: 15px;
             }
             .credencial {
-                width: 100%; /* Ocupar todo el ancho en móviles */
-                padding: 15px; /* Reducir relleno */
+                padding: 15px;
             }
             .subtitulo {
-                font-size: 18px; /* Reducir tamaño del subtítulo */
+                font-size: 18px;
             }
             .label {
-                font-size: 9px; /* Reducir tamaño de las etiquetas */
+                font-size: 9px;
             }
             .foto-container {
-                width: 80px; /* Reducir tamaño del contenedor de la foto */
+                width: 80px;
                 margin-left: 10px;
             }
             .foto {
                 width: 80px;
-                height: 100px; /* Reducir tamaño de la foto */
+                height: 100px;
             }
             .os10 {
-                font-size: 16px; /* Reducir tamaño del texto OS10 */
+                font-size: 16px;
             }
             .qr {
                 width: 50px;
-                height: 50px; /* Reducir tamaño del QR */
+                height: 50px;
             }
+        }
+        /* Ocultar la credencial inicialmente */
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Formulario -->
         <form id="credencialForm">
             <select id="tipoAgente" required>
                 <option value="" disabled selected>Tipo de agente</option>
@@ -188,7 +195,9 @@
             <input type="file" id="foto" accept="image/*" required>
             <button type="submit">Generar Credencial</button>
         </form>
-        <div class="credencial" id="credencial">
+
+        <!-- Tarjeta generada -->
+        <div class="credencial hidden" id="credencial">
             <div class="titulo">TARJETA DE IDENTIFICACIÓN</div>
             <div class="subtitulo" id="tipoAgenteDisplay">GUARDIA DE SEGURIDAD</div>
             <div class="content-wrapper">
@@ -218,38 +227,46 @@
             <div class="qr" id="qrcode"></div>
         </div>
     </div>
+
     <script>
         document.getElementById('credencialForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
+            // Obtener los valores del formulario
             const empresa = document.getElementById('empresa').value;
             const nombre = document.getElementById('nombre').value;
             const rut = document.getElementById('rut').value;
             const validez = document.getElementById('validez').value;
             const tipoAgente = document.getElementById('tipoAgente').value;
             const foto = document.getElementById('foto').files[0];
-            
+
+            // Mostrar los valores en la tarjeta
             document.getElementById('empresaDisplay').textContent = empresa;
             document.getElementById('nombreDisplay').textContent = nombre;
             document.getElementById('rutDisplay').textContent = rut;
             document.getElementById('validezDisplay').textContent = new Date(validez).toLocaleDateString('es-CL');
             document.getElementById('tipoAgenteDisplay').textContent = tipoAgente;
-            
+
+            // Mostrar la foto seleccionada
             if (foto) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('fotoDisplay').style.backgroundImage = `url(${e.target.result})`;
-                }
+                };
                 reader.readAsDataURL(foto);
             }
-            
-            // Generar QR
+
+            // Generar el QR
             document.getElementById('qrcode').innerHTML = '';
             new QRCode(document.getElementById("qrcode"), {
                 text: "Credencial original para " + nombre + " - RUT: " + rut,
                 width: 64,
                 height: 64
             });
+
+            // Ocultar el formulario y mostrar la tarjeta
+            document.getElementById('credencialForm').classList.add('hidden');
+            document.getElementById('credencial').classList.remove('hidden');
         });
     </script>
 </body>
